@@ -6,13 +6,16 @@ services:
     platform: linux/amd64
     container_name: mysql_container
     environment:
-      MYSQL_ROOT_PASSWORD: test #rootパスワード
+      MYSQL_ROOT_PASSWORD: test
       MYSQL_DATABASE: test
     ports:
       - '3308:3306'
     volumes:
       - mysql_volume:/var/lib/mysql
       - ./initdb.d:/docker-entrypoint-initdb.d
+    # @see https://qiita.com/masayuki14/items/3aa199035eb4fdcfa446
+    command:
+      - --sql-mode=NO_ENGINE_SUBSTITUTION
 
 volumes:
   mysql_volume:

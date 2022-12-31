@@ -1,7 +1,17 @@
 <html lang="ja">
     <body>
+        <h1>ログイン中</h1>
         <div>
-            <h2>ログイン中</h2>
+            ユーザー名を変更する（現在：<%- session %>）
+            <form action="/user" method="POST">
+                <label>
+                    name
+                    <input type="text" name="name"><br>
+                    <!-- FIXME: 固定値を入れている -->
+                    <input type="hidden" name="id" value="1">
+                </label><br>
+                <button type="submit">送信</button>
+            </form>
         </div>
         <div>
             <h2>Sessionの確認</h2>
@@ -12,7 +22,7 @@
             <p>cookie: <%- cookies %></p>
         </div>
         <div>
-            <h2>ログアウトする</h2>
+            ログアウトする
             <form action="/logout" method="GET">
                 <button type="submit">送信</button>
             </form>
