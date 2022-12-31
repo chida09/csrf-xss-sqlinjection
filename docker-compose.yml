@@ -1,16 +1,18 @@
 version: '3.8'
 
 services:
-  my_mysql:
-    image: mysql #もととなるイメージ。ここではmysql
-    environment: # 最小限の記述にしています。他にも環境設定は可能です。
+  mysql:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: mysql_container
+    environment:
       MYSQL_ROOT_PASSWORD: test #rootパスワード。今回はrootにしました。
-      MYSQL_DATABASE: test_db #作成するデータベース。今回はmy_mysql_dbにしました。
+      MYSQL_DATABASE: test
     ports:
-      - '3500:3500' #接続するポート番号。お好きな番号でいけます。
+      - '3308:3306' #接続するポート番号。お好きな番号でいけます。
     volumes:
-      - my_volume:/var/lib/mysql    #第３の場所my_volumeをコンテナ内に同期するコード
+      - my_volume:/var/lib/mysql
+    command: mysqld --innodb_use_native_aio=0
 
-#第3の場所にデータを置いておく場所をつくる。こちらも忘れずに追記してください。
 volumes:
   my_volume:

@@ -1,14 +1,21 @@
 
 ```
-node app.js
+npx nodemon index.js
 ```
 
 
 ```
 dc up -d
-dc exec my_mysql /bin/bash 
+dc exec mysql /bin/bash 
 mysql -uroot -ptest
 show databases;
-use test_db;
+use test;
 show tables;
+
++-------------------+
+| Tables_in_test_db |
++-------------------+
+| User              |
++-------------------+
+
 ```
