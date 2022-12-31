@@ -4,6 +4,14 @@
             <h2>ログイン中</h2>
         </div>
         <div>
+            <h2>Sessionの確認</h2>
+            <p>session: <%- session %></p>
+        </div>
+        <div>
+            <h2>Cookieの確認</h2>
+            <p>cookie: <%- cookies %></p>
+        </div>
+        <div>
             <h2>ログアウトする</h2>
             <form action="/logout" method="GET">
                 <button type="submit">送信</button>
