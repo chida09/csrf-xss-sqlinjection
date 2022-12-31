@@ -24,4 +24,14 @@ app.get('/', (req, res) => {
   })
 })
 
+app.post('/', (req, res) => {
+  const sql = "INSERT INTO users SET ?"
+  con.query(sql,req.body,function(err, result, fields){
+    if (err) throw err;
+    console.log(result);
+    res.redirect('/');
+  });
+});
+
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
