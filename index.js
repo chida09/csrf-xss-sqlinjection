@@ -32,11 +32,14 @@ app.get('/', (req, res) => {
   })
 })
 
+app.get('/member', (req, res) => {
+  res.render('member')
+})
+
 // 新規アカウント作成
 app.post('/', (req, res) => {
   const sql = "INSERT INTO users SET ?"
   connect.query(sql,req.body,function(err, result, fields){
-
     if (err) throw err
     res.redirect('/')
   })
@@ -47,17 +50,15 @@ app.post('/login', (req, res) => {
   // const sql = "SELECT * FROM users WHERE name = ? AND password = ?"
   // connect.query(sql,req.body.name, req.body.password,function(err, result, fields){
   //   if (err) throw err
-  console.log('req.body.name', req.body)
     req.session.login = req.body.name
-    res.redirect('/')
-    // connect.close()
+    res.redirect('/member')
   // })
 })
 
 // ログアウト
 app.get('/logout', (req, res) => {
   req.session.login = undefined
-
+  req.session.destroy()
   res.redirect('/')
 })
 
