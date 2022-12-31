@@ -6,13 +6,13 @@ services:
     platform: linux/amd64
     container_name: mysql_container
     environment:
-      MYSQL_ROOT_PASSWORD: test #rootパスワード。今回はrootにしました。
+      MYSQL_ROOT_PASSWORD: test #rootパスワード
       MYSQL_DATABASE: test
     ports:
-      - '3308:3306' #接続するポート番号。お好きな番号でいけます。
+      - '3308:3306'
     volumes:
-      - my_volume:/var/lib/mysql
-    command: mysqld --innodb_use_native_aio=0
+      - mysql_volume:/var/lib/mysql
+      - ./initdb.d:/docker-entrypoint-initdb.d
 
 volumes:
-  my_volume:
+  mysql_volume:
