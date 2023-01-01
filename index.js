@@ -49,7 +49,7 @@ app.get('/member', (req, res) => {
   // connect.query(sql, function (err, result, fields) {
   //   if (err) throw err
   res.render('member', {
-    session: req.session.user.name,
+    session: req.session.user,
     cookies: req.cookies['my-site-cookie'],
     id: 1
   })
@@ -71,7 +71,8 @@ app.post('/login', (req, res) => {
   // connect.query(sql,req.body.name, req.body.password,function(err, result, fields){
   //   if (err) throw err
   // セッションに保存する
-  req.session.user = req.session.user || {name: req.body.name}
+  // req.session.user = req.session.user || {name: req.body.name}
+  req.session.user = req.cookies['my-site-cookie']
   res.redirect('/member')
   // })
 })
@@ -80,19 +81,16 @@ app.post('/login', (req, res) => {
 app.post('/user', (req, res) => {
   const sql = "UPDATE users SET name = ? WHERE id = ?"
   connect.query(sql, [req.body.name, req.body.id], (err, result, fields) => {
-
     if (err) throw err
-    req.session.user.name = req.body.name
+    // req.session.user.name = req.body.name
     res.redirect('/member')
   })
-
 })
 
 // API - ログアウト
 app.get('/logout', (req, res) => {
   req.session.destroy()
   res.redirect('/')
-  console.log('req.session', req.session)
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
