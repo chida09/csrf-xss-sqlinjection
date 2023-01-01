@@ -4,8 +4,8 @@ drop table if exists `users`;
 create table users
 (
     id            int(11) not null auto_increment,
-    name          varchar(60),
-    email  text,
+    name          text,
+    email         text,
     password      varchar(100),
     hash_password text,
     created_at    datetime default current_timestamp,

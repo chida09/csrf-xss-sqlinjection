@@ -14,8 +14,13 @@ const sessionOption = {
   resave: false,
   // 推奨項目（新規にセッションを生成して何も代入されていなくても値を入れる場合にはtrue）
   saveUninitialized: true,
-  // 生存期間（単位：ミリ秒）
-  cookie: {maxAge: 60 * 60 * 1000},
+
+  cookie: {
+    // 生存期間（単位：ミリ秒）
+    maxAge: 60 * 60 * 1000,
+    // クライアント側でJavaScriptなどからアクセスできないようにする場合にはtrue
+    httpOnly: false
+  },
   // クッキー名（デフォルトでは「connect.sid」）
   name: 'my-site-cookie',
   // アクセスの度に、有効期限を伸ばす場合にはtrue
@@ -76,17 +81,20 @@ app.post('/login', (req, res) => {
   const sql = "SELECT * FROM users WHERE email = ?"
   connect.query(sql, req.body.email, function (err, result, fields) {
     if (err) throw err
+    if (result.length === 0) {
+      return forbidden()
+    }
 
     // パスワードの検証 本来は403エラーページにとばす
     const isValidate = validatePassword(req.body.password, result[0].hash_password)
-    if (!isValidate === false) {
-      alert('Error 403')
+    console.log('isValidate', isValidate)
+    if (isValidate === false) {
+      return forbidden()
     }
-
+    req.session.user = req.cookies['my-site-cookie']
+    console.log('OK 200')
     res.redirect('/member')
   })
-
-
 })
 
 // API - ユーザー名の変更（id: 1で固定）
@@ -140,4 +148,12 @@ const createHashPassword = (pass) => {
   // パスワードをhash化
   const salt = bcrypt.genSaltSync(len)
   return bcrypt.hashSync(pass, salt)
+}
+
+const forbidden = (res) => {
+  return res.status(403).json({
+    error: {
+      message: '403 forbidden.'
+    }
+  })
 }

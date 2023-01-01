@@ -8,15 +8,17 @@ npx nodemon index.js
 dc up -d
 dc exec mysql /bin/bash 
 mysql -uroot -ptest
-show databases;
 use test;
 show tables;
+select * from users;
 
 +-------------------+
 | Tables_in_test_db |
 +-------------------+
 | users             |
 +-------------------+
+
+dc down --volumes
 
 ```
 
