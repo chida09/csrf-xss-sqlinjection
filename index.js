@@ -4,7 +4,8 @@ const app = express()
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const port = 3200
+const bcrypt = require("bcryptjs")
+const port = 3222
 
 const sessionOption = {
   // 必須項目（署名を行うために使います）
@@ -57,8 +58,8 @@ app.get('/member', (req, res) => {
 
 // API - 新規アカウント作成
 app.post('/', (req, res) => {
-  const sql = "INSERT INTO users SET ?"
-  connect.query(sql, req.body, function (err, result, fields) {
+  const sql = "INSERT INTO users (name, password, hash_password) VALUES (?,?,?)"
+  connect.query(sql, [req.body.name, req.body.password, createHashPassword(req.body.password)], function (err, result, fields) {
     if (err) throw err
     res.redirect('/')
   })
@@ -75,10 +76,10 @@ app.post('/login', (req, res) => {
   // })
 })
 
+// API - ユーザー名の変更（id: 1で固定）
 app.post('/user', (req, res) => {
-  console.log(req.body)
   const sql = "UPDATE users SET name = ? WHERE id = ?"
-  connect.query(sql, [req.body.name, req.body.id], function (err, result, fields) {
+  connect.query(sql, [req.body.name, req.body.id], (err, result, fields) => {
 
     if (err) throw err
     req.session.user.name = req.body.name
@@ -95,3 +96,32 @@ app.get('/logout', (req, res) => {
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+/**
+ * パスワードを検証
+ * @see https://blog.myntinc.com/2022/01/phppasswordhashpasswordverifynodejs.html
+ * @param pass
+ * @returns bool
+ */
+const validatePassword = (pass) => {
+  const len = 11
+
+  // パスワードをhash化
+  const salt = bcrypt.genSaltSync(len)
+  const hash = bcrypt.hashSync(pass, salt)
+
+  return bcrypt.compareSync(pass, hash)
+}
+
+/**
+ * ハッシュ化されたパスワードを生成
+ * @param pass
+ * @returns string
+ */
+const createHashPassword = (pass) => {
+  const len = 11
+
+  // パスワードをhash化
+  const salt = bcrypt.genSaltSync(len)
+  return bcrypt.hashSync(pass, salt)
+}
