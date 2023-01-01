@@ -63,6 +63,9 @@ app.post('/', (req, res) => {
   const {name, password, email} = req.body
   connect.query(sql, [name, password, email, createHashPassword(password)], function (err, result, fields) {
     if (err) throw err
+
+    // セッションに保存する
+    req.session.user = req.cookies['my-site-cookie']
     res.redirect('/')
   })
 
@@ -80,8 +83,6 @@ app.post('/login', (req, res) => {
       alert('Error 403')
     }
 
-    // セッションに保存する
-    req.session.user = req.cookies['my-site-cookie']
     res.redirect('/member')
   })
 
@@ -102,6 +103,8 @@ app.post('/user', (req, res) => {
 // API - ログアウト
 app.get('/logout', (req, res) => {
   req.session.destroy()
+
+  res.clearCookie('my-site-cookie')
   res.redirect('/')
 })
 
