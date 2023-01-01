@@ -1,16 +1,16 @@
-DROP TABLE IF EXISTS `users`;
+drop table if exists `users`;
 
 -- エディタ上に出ているエラーは無視で良い
-CREATE TABLE users
+create table users
 (
-    id            int(11) NOT NULL AUTO_INCREMENT,
+    id            int(11) not null auto_increment,
     name          varchar(60),
-    mail_address  text,
+    email  text,
     password      varchar(100),
     hash_password text,
     created_at    datetime default current_timestamp,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+    primary key (`id`)
+) engine=innodb auto_increment=1 default charset=utf8mb4;
 
--- INSERT INTO users (name, mail_address, password)
--- VALUES ('yamada', 'yamada@test.com', '123');
+-- insert into users (name, mail_address, password)
+-- values ('yamada', 'yamada@test.com', '123');

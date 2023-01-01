@@ -11,9 +11,9 @@
                 </code>
                 <form action="/" method="POST">
                     <label>
-                        name<input type="text" name="name"><br>
-                        email<input type="text" name="mail_address"><br>
-                        password<input type="text" name="password">
+                        name<input type="text" name="name" placeholder="yamada"><br>
+                        email<input type="text" name="email" placeholder="yamada@test.com"><br>
+                        password<input type="text" name="password" placeholder="123">
                     </label><br>
                     <button type="submit">送信</button>
                 </form>
@@ -28,7 +28,7 @@
                             <!-- 【%- %】の書き方はエスケープなし -->
                             <!-- 【%= %】の書き方はエスケープあり -->
                             <td><%- value.name %></td>
-                            <td><%- value.mail_address %></td>
+                            <td><%- value.email %></td>
                             <td><%- value.password %></td>
                         </tr>
                     <% }); %>
@@ -38,7 +38,7 @@
                 <h2>ログイン</h2>
                 <form action="/login" method="POST">
                     <label>
-                        name<input type="text" name="name"><br>
+                        id(email)<input type="text" name="email"><br>
                         password<input type="text" name="password">
                     </label><br>
                     <button type="submit">送信</button>

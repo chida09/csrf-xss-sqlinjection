@@ -41,6 +41,7 @@ app.get('/', (req, res) => {
     if (err) throw err
     res.render('index', {users: result})
   })
+
 })
 
 // View - ユーザー情報
@@ -58,23 +59,33 @@ app.get('/member', (req, res) => {
 
 // API - 新規アカウント作成
 app.post('/', (req, res) => {
-  const sql = "INSERT INTO users (name, password, hash_password) VALUES (?,?,?)"
-  connect.query(sql, [req.body.name, req.body.password, createHashPassword(req.body.password)], function (err, result, fields) {
+  const sql = "INSERT INTO users (name, password, email, hash_password) VALUES (?,?,?,?)"
+  const {name, password, email} = req.body
+  connect.query(sql, [name, password, email, createHashPassword(password)], function (err, result, fields) {
     if (err) throw err
     res.redirect('/')
   })
+
 })
 
 // API - ログイン
 app.post('/login', (req, res) => {
-  // const sql = "SELECT * FROM users WHERE name = " + req.params.id
-  // connect.query(sql,req.body.name, req.body.password,function(err, result, fields){
-  //   if (err) throw err
-  // セッションに保存する
-  // req.session.user = req.session.user || {name: req.body.name}
-  req.session.user = req.cookies['my-site-cookie']
-  res.redirect('/member')
-  // })
+  const sql = "SELECT * FROM users WHERE email = ?"
+  connect.query(sql, req.body.email, function (err, result, fields) {
+    if (err) throw err
+
+    // パスワードの検証 本来は403エラーページにとばす
+    const isValidate = validatePassword(req.body.password, result[0].hash_password)
+    if (!isValidate === false) {
+      alert('Error 403')
+    }
+
+    // セッションに保存する
+    req.session.user = req.cookies['my-site-cookie']
+    res.redirect('/member')
+  })
+
+
 })
 
 // API - ユーザー名の変更（id: 1で固定）
@@ -85,6 +96,7 @@ app.post('/user', (req, res) => {
     // req.session.user.name = req.body.name
     res.redirect('/member')
   })
+
 })
 
 // API - ログアウト
@@ -98,17 +110,20 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 /**
  * パスワードを検証
  * @see https://blog.myntinc.com/2022/01/phppasswordhashpasswordverifynodejs.html
- * @param pass
+ * @param inputPassword
+ * @param savedPassword
  * @returns bool
  */
-const validatePassword = (pass) => {
-  const len = 11
+const validatePassword = (inputPassword, savedPassword) => {
+  // const len = 11
 
   // パスワードをhash化
-  const salt = bcrypt.genSaltSync(len)
-  const hash = bcrypt.hashSync(pass, salt)
+  // const salt = bcrypt.genSaltSync(len)
+  // const hash = bcrypt.hashSync(inputPassword, salt)
+  console.log('inputPassword', inputPassword)
+  console.log('savedPassword', savedPassword)
 
-  return bcrypt.compareSync(pass, hash)
+  return bcrypt.compareSync(inputPassword, savedPassword)
 }
 
 /**
